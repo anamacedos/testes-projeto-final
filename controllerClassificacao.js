@@ -1,16 +1,16 @@
-//Chamar o DAO de quantidade aqui em cima e não esquecer de chama-la de "quantidadeDAO"
+//Chamar o DAO de classificação aqui em cima e não esquecer de chama-la de "classificacaoDAO"
 //Chamar o arquivo de mensagens como "MESSAGE"
 
-//Função para inserir uma nova quantidade
-const insertQuantidade = async function (quantidade, contentType){
+//Função para inserir uma nova classificação
+const insertClassificacao = async function (classificacao, contentType){
     try {
         if(contentType == 'application/json'){
-            if(quantidade.nome == undefined || quantidade.nome == null || quantidade.nome == "" ){
+            if(classificacao.nome == undefined || classificacao.nome == null || classificacao.nome == "" ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS
             }else{
                 //encaminha os dados do novo sexo para ser inserido no banco de dados
-                let resultQuantidade = await quantidadeDAO.insertQuantidade(quantidade)
-                if (resultQuantidade)
+                let resultClassificacao = await classificacaoDAO.insertClassificacao(classificacao)
+                if (resultClassificacao)
                     return MESSAGE.SUCESS_CREATED_ITEM
                 else
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
@@ -23,22 +23,22 @@ const insertQuantidade = async function (quantidade, contentType){
     }
 }
 
-//Função para listar todas as quantidades
-const listarQuantidade = async function(){
+//Função para listar todas as classificações
+const listarClassificacao = async function(){
     try {
-        let dadosQuantidade = {}
-        let resultQuantidade = await quantidadeDAO.selectAllQuantidade()
+        let dadosClassificacao = {}
+        let resultClassificacao = await classificacaoDAO.selectAllClassificacao()
 
-        if(resultQuantidade != false){
-            if(resultQuantidade.length > 0 || typeof(resultQuantidade == 'object')){
+        if(resultClassificacao != false){
+            if(resultClassificacao.length > 0 || typeof(resultClassificacao == 'object')){
 
                 //definindo os dados do objeto json que será retornado
-                dadosQuantidade.status = true
-                dadosQuantidade.status_code = 200
-                dadosQuantidade.item = resultQuantidade.length
-                dadosQuantidade.quantidades = resultQuantidade
+                dadosClassificacao.status = true
+                dadosClassificacao.status_code = 200
+                dadosClassificacao.item = resultClassificacao.length
+                dadosClassificacao.classificacoes = resultClassificacao
 
-                return dadosQuantidade
+                return dadosClassificacao
             }else{
                 return MESSAGE.ERROR_NOT_FOUND
             } 
@@ -50,23 +50,24 @@ const listarQuantidade = async function(){
     }
 }
 
-//Função para listar a quantidade com base no id
-const buscarQuantidadePeloId = async function(id){
+
+//Função para listar a classificação com base no id
+const buscarClassificacaoPeloId = async function(id){
     try {
         if(id == '' || id == undefined || id == null || isNaN(id) || id<=0){
             return MESSAGE.ERROR_REQUIRED_FIELDS
         }else{
-            let dadosQuantidade = {}
-            let resultQuantidade = await quantidadeDAO.selectByQuantidade(parseInt(id))
+            let dadosClassificacao = {}
+            let resultClassificacao = await classificacaoDAO.selectByIdClassificacao(parseInt(id))
 
-            if (resultQuantidade != false){
-                if(resultQuantidade.length > 0 || typeof(resultQuantidade) == 'object'){
+            if (resultClassificacao != false){
+                if(resultClassificacao.length > 0 || typeof(resultClassificacao) == 'object'){
                     //cria um objeto do tipo json para retornar a lista de jogos (o jogo)
-                    dadosQuantidade.status = true
-                    dadosQuantidade.status_code = 200
-                    dadosQuantidade.quantidade = resultQuantidade
+                    dadosClassificacao.status = true
+                    dadosClassificacao.status_code = 200
+                    dadosClassificacao.classificacao = resultClassificacao
 
-                    return dadosQuantidade
+                    return dadosClassificacao
                 }else{
                     return MESSAGE.ERROR_NOT_FOUND
                 }
@@ -80,23 +81,23 @@ const buscarQuantidadePeloId = async function(id){
     }
 }
 
-//Função para listar a quantidade com base no nome
-const buscarQuantidadePeloNome = async function(id){
+//Função para listar a classificação com base no id
+const buscarClassificacaoPeloNome = async function(id){
     try {
         if(id == '' || id == undefined || id == null || isNaN(id) || id<=0){
             return MESSAGE.ERROR_REQUIRED_FIELDS
         }else{
-            let dadosQuantidade = {}
-            let resultQuantidade = await quantidadeDAO.selectByNameQuantidade(parseInt(id))
+            let dadosClassificacao = {}
+            let resultClassificacao = await classificacaoDAO.selectByNameClassificacao(parseInt(id))
 
-            if (resultQuantidade != false){
-                if(resultQuantidade.length > 0 || typeof(resultQuantidade) == 'object'){
+            if (resultClassificacao != false){
+                if(resultClassificacao.length > 0 || typeof(resultClassificacao) == 'object'){
                     //cria um objeto do tipo json para retornar a lista de jogos (o jogo)
-                    dadosQuantidade.status = true
-                    dadosQuantidade.status_code = 200
-                    dadosQuantidade.quantidade = resultQuantidade
+                    dadosClassificacao.status = true
+                    dadosClassificacao.status_code = 200
+                    dadosClassificacao.classificacao = resultClassificacao
 
-                    return dadosQuantidade
+                    return dadosClassificacao
                 }else{
                     return MESSAGE.ERROR_NOT_FOUND
                 }
@@ -110,16 +111,16 @@ const buscarQuantidadePeloNome = async function(id){
     }
 }
 
-//Função para deletar uma quantidade
-const deleteQuantidade = async function(id){
+//Função para deletar uma classificação
+const deleteClassificacao = async function(id){
     try {
         if(id == "" || id == undefined || id == null || isNaN(id) || id<=0){
             return MESSAGE.ERROR_REQUIRED_FIELDS
             }else{
-                let resultQuantidade = await quantidadeDAO.selectByQuantidade(parseInt(id))
-                if(resultQuantidade != false || typeof resultQuantidade == 'object'){
-                    if(resultQuantidade.length > 0 ){
-                        let result = await quantidadeDAO.deleteQuantidade(id)
+                let resultClassificacao = await classificacaoDAO.selectByIdClassificacao(parseInt(id))
+                if(resultClassificacao != false || typeof resultClassificacao == 'object'){
+                    if(resultClassificacao.length > 0 ){
+                        let result = await classificacaoDAO.deleteClassificacao(parseInt(id))
 
                         if(result)
                             return MESSAGE.SUCESS_DELETED_ITEM
@@ -137,20 +138,19 @@ const deleteQuantidade = async function(id){
     }
 }
 
-
-//Função para atualizar uma quantidade
-const updateQuantidade = async function(quantidade, id, contentType){
+//Função para atualizar uma classificacao
+const updateClassificacao = async function(classificacao, id, contentType){
     try {
         if(contentType == 'application/json'){
-            if(quantidade.nome == undefined || quantidade.nome == null || quantidade.nome == "" ){
+            if(classificacao.nome == undefined || classificacao.nome == null || classificacao.nome == "" ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS
             }else{
                 //validar se o id existe no banco
-                let resultQuantidade = await buscarQuantidadePeloId(parseInt(id))
-                if(resultQuantidade.status_code == 200){
+                let resultClassificacao = await classificacaoDAO.selectByIdClassificacao(parseInt(id))
+                if(resultClassificacao.status_code == 200){
                     //adiciona o atributo id no json para encaminhar o id da requisição
-                    quantidade.id = parseInt(id)
-                    let result = await quantidadeDAO.updateQuantidade(quantidade)
+                    classificacao.id = parseInt(id)
+                    let result = await sexoDAO.updateClassificacao(classificacao)
 
                     if(result)
                         return MESSAGE.SUCESS_UPDATED_ITEM
@@ -168,4 +168,13 @@ const updateQuantidade = async function(quantidade, id, contentType){
     } catch (error) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
+}
+
+module.exports = {
+    insertClassificacao,
+    listarClassificacao,
+    buscarClassificacaoPeloId,
+    buscarClassificacaoPeloNome,
+    deleteClassificacao,
+    updateClassificacao
 }

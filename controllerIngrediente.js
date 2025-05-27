@@ -156,7 +156,7 @@ const updateIngrediente = async function(ingrediente, id, contentType){
                         return MESSAGE.SUCESS_UPDATED_ITEM
                     else
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
-                }else if(resultSexo.status_code == 404){
+                }else if(resultIngrediente.status_code == 404){
                     return MESSAGE.ERROR_NOT_FOUND
                 }else{
                     return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
